@@ -4,12 +4,13 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
 const port = 3000;
 const app = express();
 
 // List array
-let items = ["Buy Food", "Cook Food", "Eat Food"];
-let workItems = [];
+const items = ["Buy Food", "Cook Food", "Eat Food"];
+const workItems = [];
 
 // Use EJS as view engine
 app.set("view engine", "ejs");
@@ -25,15 +26,8 @@ app.use(express.static("public"));
 // └──────────────────────┘
 
 app.get("/", function(req, res){
-    const today = new Date();
     
-    const options = {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    }
-
-    const day = today.toLocaleDateString("en-US", options);
+    const day = date.getDay();
 
     // Render list.ejs
     res.render("list", {listTitle: day, newListItems: items})
@@ -52,8 +46,6 @@ app.post("/", function(req, res){
         // Send back to home page (to re-render)
         res.redirect("/");
     }
-
-    items.push(item);
 
     // Send back to home page (to re-render)
     res.redirect("/");
