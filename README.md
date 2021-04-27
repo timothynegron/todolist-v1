@@ -8,12 +8,14 @@
 
 1. Templates
 2. Using EJS with Express
+3. Creating Layouts with EJS
 
 ### Notes
 
 * Templates helps us write less code.
 * When HTML pages are similar we can use Templates to help us write less code.
 * There are many template tools.
+* Use 'Scriptlet' tag, `<% [JS Code Here] %> to add JS in .ejs file
 
 ### Steps
 
