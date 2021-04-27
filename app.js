@@ -9,16 +9,16 @@ const app = express();
 
 // List array
 let items = ["Buy Food", "Cook Food", "Eat Food"];
+let workItems = [];
 
-// ┌────────────────────────┐
-// │   Initialize Modules   │	
-// └────────────────────────┘
+// Use EJS as view engine
+app.set("view engine", "ejs");
 
 // Use body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Use EJS as view engine
-app.set("view engine", "ejs");
+// Use styles.css
+app.use(express.static("public"));
 
 // ┌──────────────────────┐
 // │   Server Functions   │	
@@ -36,15 +36,35 @@ app.get("/", function(req, res){
     const day = today.toLocaleDateString("en-US", options);
 
     // Render list.ejs
-    res.render("list", {kindOfDay: day, newListItems: items})
+    res.render("list", {listTitle: day, newListItems: items})
 });
 
 app.post("/", function(req, res){
+    
     const item = req.body.newItem;
+
+    if(req.body.list === "Work"){
+        workItems.push(item);
+        // Re-render work list
+        res.redirect("/work");
+    }else{
+        items.push(item);
+        // Send back to home page (to re-render)
+        res.redirect("/");
+    }
+
     items.push(item);
 
     // Send back to home page (to re-render)
     res.redirect("/");
+})
+
+app.get("/work", function(req, res){
+    res.render("list", {listTitle: "Work List", newListItems: workItems});
+})
+
+app.get("/about", function(req, res){
+    res.render("about");
 })
 
 app.listen(port, function(){
